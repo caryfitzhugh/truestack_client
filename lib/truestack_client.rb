@@ -1,0 +1,3 @@
+module TruestackClient
+  # Your code goes here...
+end
