@@ -5,7 +5,9 @@ require 'logger'
 require 'truestack_client/ws_cli'
 
 module TruestackClient
-  class WSClient
+  ## Should have a set of API methods (request, exception, log, deploy)
+  #  Includes logic to talk to director / not depending on the state of the system
+  class Websocket
     def initialize(url, opts={})
       @opts = opts
       @url = URI.parse(url)
