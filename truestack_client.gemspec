@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Greenfry Labs"]
   s.email       = ["gems@greenfrylabs.com"]
-  s.homepage    = "www.truestack.com"
+  s.homepage    = "http://www.truestack.com"
   s.summary     = %q{Client thread-safe library which connects to the truestack backend}
   s.description = %q{Client library which is thread-safe, which connects to the truestack backend.  Uses websockets or POSTs depending on what is available.}
 
