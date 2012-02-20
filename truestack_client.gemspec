@@ -6,11 +6,11 @@ Gem::Specification.new do |s|
   s.name        = "truestack_client"
   s.version     = TruestackClient::VERSION
   s.platform    = Gem::Platform::RUBY
-  s.authors     = ["TODO: Write your name"]
-  s.email       = ["TODO: Write your email address"]
-  s.homepage    = ""
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.authors     = ["Greenfry Labs"]
+  s.email       = ["gems@greenfrylabs.com"]
+  s.homepage    = "www.truestack.com"
+  s.summary     = %q{Client thread-safe library which connects to the truestack backend}
+  s.description = %q{Client library which is thread-safe, which connects to the truestack backend.  Uses websockets or POSTs depending on what is available.}
 
   s.rubyforge_project = "truestack_client"
 
