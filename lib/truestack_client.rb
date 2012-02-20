@@ -5,21 +5,21 @@ require 'logger'
 require 'truestack_client/ws_cli'
 
 module TruestackClient
-  class Client
+  class WSClient
     def initialize(url, opts={})
       @opts = opts
       @url = URI.parse(url)
       @proto = :hybi07
 
       log = opts[:logger] || Logger.new(STDOUT)
-      log.log_level = opts[:logger_level] || Logger::INFO
+      log.level = opts[:logger_level] || Logger::INFO
 
-      @client = WSClient.new(log, {:host => @url.host, :port => @url.port, :proto => @proto, :frame_compression => false})
+      @ws_client = WSClient.new(log, {:host => @url.host, :port => @url.port, :proto => @proto, :frame_compression => false})
     end
 
     def method_missing(*args)
       name = args.shift
-      @client.send(name, *args)
+      @ws_client.send(name, *args)
     end
 
     def connect(opts={})
@@ -32,11 +32,11 @@ module TruestackClient
       sec_headers["TrueStack-Access-Token"]= signature
       sec_headers["TrueStack-Access-Nonce"]= opts[:nonce]
 
-      @client.connect([opts[:protocol]], sec_headers)
+      @ws_client.connect([opts[:protocol]], sec_headers)
     end
 
     def connected?
-      @client.connected?
+      @ws_client.connected?
     end
 
     # Data should be a hash such as this:
@@ -50,7 +50,7 @@ module TruestackClient
     #
     # timestamp is the time of the request occurring
     def request(action_name, data={}, timestamp= Time.now)
-      @client.write_data({type: :request, :name=>action_name, :timestamp => timestamp, :data=>data}.to_json)
+      @ws_client.write_data({type: :request, :name=>action_name, :timestamp => timestamp, :data=>data}.to_json)
     end
   end
 end
