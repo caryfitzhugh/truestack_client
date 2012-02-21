@@ -44,7 +44,7 @@ module TruestackClient
   end
 
   def self.deploy(commit_id, commit_data={})
-    http.deploy(JSON.generate({:commit_id => commit_id, :data => commit_data})
+    http.deploy(JSON.generate({:commit_id => commit_id, :data => commit_data}))
   end
 
   def self.http
