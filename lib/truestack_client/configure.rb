@@ -21,5 +21,6 @@ module TruestackClient
         logger.log_level = Logger::INFO
       end
       logger.log_level
+    end
   end
 end
