@@ -1,58 +1,89 @@
 require 'uri'
 require 'base64'
 require 'openssl'
+require 'json'
 require 'logger'
-require 'truestack_client/ws_cli'
+require 'truestack_client/websocket'
+require 'truestack_client/http'
+require 'truestack_client/configure'
 
 module TruestackClient
-  ## Should have a set of API methods (request, exception, log, deploy)
-  #  Includes logic to talk to director / not depending on the state of the system
-  class Websocket
-    def initialize(url, opts={})
-      @opts = opts
-      @url = URI.parse(url)
-      @proto = :hybi07
+  def self.configure
+    yield config
+    config
+  end
 
-      log = opts[:logger] || Logger.new(STDOUT)
-      log.level = opts[:logger_level] || Logger::INFO
+  # Data should be a hash such as this:
+  # {
+  #   'grouping:function#name' => { s: start_time_since_request_began, d: duration_of_request }
+  #   ...
+  # }
+  #
+  # Where grouping is one of model / app / view / browser / custom
+  # function name is either Class#action, or view_path
+  #
+  # timestamp is the time of the request occurring
+  def self.request(action_name, start_time, method_data={})
+      payload = JSON.generate({
+                                    :type => :request,
+                                    :name=>action_name,
+                                    :timestamp => start_time,
+                                    :data=>method_data
+                                   })
+      Rails.logger.info "Client Request>>> #{payload}"
+      websocket_or_http.write_data(payload)
+  end
 
-      @ws_client = WSClient.new(log, {:host => @url.host, :port => @url.port, :proto => @proto, :frame_compression => false})
-    end
+  def self.exception(action_name, e)
+      websocket_or_http.write_data(JSON.generate({
+                                    :type => :exception,
+                                    :name=>action_name,
+                                    :timestamp => start_time,
+                                    :data=>{:type => e.type, :backtrace => e.backtrace, :to_s => e.to_s  }
+                                   }))
+  end
 
-    def method_missing(*args)
-      name = args.shift
-      @ws_client.send(name, *args)
-    end
+  def self.deploy(commit_id, commit_data={})
+    http.deploy(JSON.generate({:commit_id => commit_id, :data => commit_data})
+  end
 
-    def connect(opts={})
-      opts = @opts.merge(opts)
+  def self.http
+    TruestackClient::HTTP.new
+  end
 
-      signature = AccessToken.create_signature(opts[:secret], opts[:nonce])
+  def self.websocket_or_http
+    if @websocket && @websocket.connected?
+      @websocket
+    else
+      uri = URI(config.host)
+      uri.path = "/director"
+      res = Net::HTTP.get_response(uri)
+      # TODO Add some kind of limiting here
+      self.logger.info "Response from director: #{res}"
 
-      sec_headers = {}
-      sec_headers["TrueStack-Access-Key"] = opts[:key]
-      sec_headers["TrueStack-Access-Token"]= signature
-      sec_headers["TrueStack-Access-Nonce"]= opts[:nonce]
+      if (res.code === '307')
+        @websocket = TruestackClient::Websocket.new(res['location'], config)
+        @websocket.connect
+        @websocket
+      else
+        # Are we leaving this open / tossing resources?
+        @websocket = nil
+        TruestackClient.http
+      end
+   end
+  end
 
-      @ws_client.connect([opts[:protocol]], sec_headers)
-    end
-
-    def connected?
-      @ws_client.connected?
-    end
-
-    # Data should be a hash such as this:
-    # {
-    #   'grouping:function#name' => { s: start_time_since_request_began, d: duration_of_request }
-    #   ...
-    # }
-    #
-    # Where grouping is one of model / app / view / browser / custom
-    # function name is either Class#action, or view_path
-    #
-    # timestamp is the time of the request occurring
-    def request(action_name, data={}, timestamp= Time.now)
-      @ws_client.write_data({type: :request, :name=>action_name, :timestamp => timestamp, :data=>data}.to_json)
-    end
+  def self.logger
+    config.logger
+  end
+  def self.config
+    @config ||= TruestackClient::Configure.new
+  end
+  def self.create_signature(secret, nonce)
+    digest = OpenSSL::Digest::Digest.new('sha256')
+    OpenSSL::HMAC.hexdigest(digest, secret, nonce)
+  end
+  def self.create_nonce
+    Time.now.to_i.to_s + OpenSSL::Random.random_bytes(32).unpack("H*")[0]
   end
 end
