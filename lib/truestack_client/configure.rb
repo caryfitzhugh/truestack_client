@@ -6,15 +6,16 @@ module TruestackClient
       if (v)
         @logger = v
       end
-      @logger ||= Logger.new(STDOUT)
-      log_level # To set default
+      if !@logger
+        @logger = Logger.new(STDOUT)
+        @logger.log_level = Logger::INFO
+      end
+
       @logger
     end
     def log_level(v = nil)
       if (v)
         logger.log_level = v
-      else
-        logger.log_level = Logger::INFO
       end
       logger.log_level
     end
