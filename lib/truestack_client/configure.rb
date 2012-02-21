@@ -1,11 +1,5 @@
 module TruestackClient
   class Configure
-    [:key, :secret, :host].each do |val|
-      define_method "#{val}=" do |key|
-        @key = key
-        self.val
-      end
-    end
     def key(v = nil)
       @key = key if v
       @key
