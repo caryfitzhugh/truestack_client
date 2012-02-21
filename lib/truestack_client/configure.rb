@@ -1,17 +1,7 @@
 module TruestackClient
   class Configure
-    def key(v = nil)
-      @key = key if v
-      @key
-    end
-    def secret(v = nil)
-      @secret = secret if v
-      @secret
-    end
-    def host(v = nil)
-      @host = host if v
-      @host
-    end
+    attr_accessor :key, :secret, :host
+
     def logger(v = nil)
       if (v)
         @logger = v
