@@ -1,6 +1,7 @@
 module TruestackClient
   class Websocket
     def initialize(url, config)
+      Rails.logger.info "config: #{config.to_json}"
       @config = config
       @key    = config.key
       @secret = config.secret
