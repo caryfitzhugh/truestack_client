@@ -2,7 +2,7 @@ module TruestackClient
   class Websocket
     def initialize(url, config)
       @config = config
-      @key  = config.key
+      @key    = config.key
       @secret = config.secret
       log = config.logger
       @url = URI.parse(url)
