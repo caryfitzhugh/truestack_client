@@ -11,7 +11,7 @@ end
 require 'socket'
 require 'openssl'
 require 'logger'
-require File.join(File.dirname(__FILE__), 'ws_proto_hybi07')
+require 'truestack_client/ws_proto_hybi07'
 
 module TruestackClient
   class WSClient

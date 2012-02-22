@@ -1,3 +1,4 @@
+require 'truestack_client/ws_cli'
 module TruestackClient
   class Websocket
     def initialize(url, config)
