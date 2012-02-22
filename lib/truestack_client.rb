@@ -32,6 +32,7 @@ module TruestackClient
                                     :timestamp => start_time,
                                     :data=>method_data
                                    })
+      pp payload
       Rails.logger.info "Client Request>>> #{payload}"
       websocket_or_http.write_data(payload)
   end
@@ -57,6 +58,7 @@ module TruestackClient
     if @websocket && @websocket.connected?
       @websocket
     else
+      Rails.logger.info "Config -- " + config
       uri = URI(config.host)
       uri.path = "/director"
       res = Net::HTTP.get_response(uri)
