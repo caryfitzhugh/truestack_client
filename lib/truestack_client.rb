@@ -57,7 +57,7 @@ module TruestackClient
     if @websocket && @websocket.connected?
       @websocket
     else
-      Rails.logger.info "Config -- " + config
+      Rails.logger.info "Config -- " + config.to_s
       uri = URI(config.host)
       uri.path = "/director"
       res = Net::HTTP.get_response(uri)
