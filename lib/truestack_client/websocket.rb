@@ -9,7 +9,7 @@ module TruestackClient
       @url = URI.parse(url)
       @proto = :hybi07
 
-      @ws_client = WSClient.new(log, {:host => @url.host, :port => @url.port, :proto => @proto, :frame_compression => false})
+      @ws_client = TruestackClient::WSClient.new(log, {:host => @url.host, :port => @url.port, :proto => @proto, :frame_compression => false})
       @ws_client.connect
     end
 
