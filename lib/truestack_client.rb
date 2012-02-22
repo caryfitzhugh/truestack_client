@@ -65,8 +65,6 @@ module TruestackClient
 
       if (res.code === '307')
         @websocket = TruestackClient::Websocket.new(res['location'], config)
-        @websocket.connect
-        @websocket
       else
         # Are we leaving this open / tossing resources?
         @websocket = nil
