@@ -9,10 +9,8 @@ require 'truestack_client/configure'
 
 module TruestackClient
   def self.configure
-    config.instance_eval do
-      yield
-    end
-    config
+    yield self.config
+    self.config
   end
 
   # Data should be a hash such as this:
