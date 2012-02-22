@@ -9,7 +9,9 @@ require 'truestack_client/configure'
 
 module TruestackClient
   def self.configure
-    yield config
+    config.instance_eval do
+      yield
+    end
     config
   end
 
