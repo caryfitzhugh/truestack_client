@@ -12,5 +12,8 @@ module TruestackClient
       end
       @logger
     end
+    def to_s
+      "key: #{@key} secret: #{@secret} host: #{@host}"
+    end
   end
 end
