@@ -33,7 +33,6 @@ module TruestackClient
                                     :data=>method_data
                                    })
       pp payload
-      Rails.logger.info "Client Request>>> #{payload}"
       websocket_or_http.write_data(payload)
   end
 
