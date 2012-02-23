@@ -31,7 +31,6 @@ module TruestackClient
                                     :timestamp => start_time,
                                     :data=>method_data
                                    })
-      binding.pry
       websocket_or_http.write_data(payload)
   end
 
