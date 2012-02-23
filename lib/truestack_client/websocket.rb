@@ -11,7 +11,7 @@ module TruestackClient
       @proto = :hybi07
 
       @ws_client = TruestackClient::WSClient.new(log, {:host => @url.host, :port => @url.port, :proto => @proto, :frame_compression => false})
-      @ws_client.connect
+      connect
     end
 
     def method_missing(*args)
