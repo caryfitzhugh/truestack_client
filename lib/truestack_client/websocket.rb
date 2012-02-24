@@ -2,7 +2,6 @@ require 'truestack_client/ws_cli'
 module TruestackClient
   class Websocket
     def initialize(url, config)
-      pp "config: #{config.to_s}"
       @config = config
       @key    = config.key
       @secret = config.secret
