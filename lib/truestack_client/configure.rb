@@ -1,11 +1,8 @@
 module TruestackClient
   class Configure
-    attr_accessor :key, :secret, :host
+    attr_accessor :key, :secret, :host, :logger
 
-    def logger(v = nil)
-      if (v)
-        @logger = v
-      end
+    def logger
       if !@logger
         @logger = Logger.new(STDOUT)
         @logger.level = Logger::INFO
