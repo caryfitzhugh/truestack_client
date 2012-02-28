@@ -48,7 +48,7 @@ module TruestackClient
   end
 
   def self.http
-    TruestackClient::HTTP.new
+    TruestackClient::HTTP.new(config)
   end
 
   def self.websocket_or_http

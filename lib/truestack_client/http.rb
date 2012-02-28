@@ -1,6 +1,6 @@
 module TruestackClient
   class HTTP
-    def initialize(url, config)
+    def initialize(config)
       @config = config
       @key  = config.key
       @secret = config.secret
