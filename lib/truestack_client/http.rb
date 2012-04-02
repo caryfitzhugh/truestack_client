@@ -36,7 +36,7 @@ module TruestackClient
       sec_headers["TrueStack-Access-Nonce"]= nonce
 
 
-      url = URI.parse(config.host)
+      url = URI.parse(@config.host)
       request = Net::HTTP::Post.new("/application_actions")
       request.body = data
       request.initialize_http_header(sec_headers)
