@@ -40,7 +40,7 @@ module TruestackClient
       request = Net::HTTP::Post.new("/application_actions")
       request.body = data
       request.initialize_http_header(sec_headers)
-      http.request(request)
+      request.request(request)
     end
   end
 end
