@@ -21,7 +21,7 @@ module TruestackClient
       sec_headers["TrueStack-Access-Token"]= signature
       sec_headers["TrueStack-Access-Nonce"]= nonce
 
-      request = Net::HTTP::Post.new("/deployments")
+      request = Net::HTTP::Post.new("/app/deployments")
       request.body = data
       request.initialize_http_header(sec_headers)
       http.request(request)
@@ -37,7 +37,7 @@ module TruestackClient
 
 
       url = URI.parse(@config.host)
-      request = Net::HTTP::Post.new("/application_actions")
+      request = Net::HTTP::Post.new("/app/event")
       request.body = data
       request.initialize_http_header(sec_headers)
 
