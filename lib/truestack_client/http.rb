@@ -40,7 +40,14 @@ module TruestackClient
       request = Net::HTTP::Post.new("/application_actions")
       request.body = data
       request.initialize_http_header(sec_headers)
-      request.request(request)
+
+      res = Net::HTTP.new(url.host, url.port).start {|http| http.request(request) }
+      case res
+      when Net::HTTPSuccess, Net::HTTPRedirection
+        # OK
+      else
+        res.error!
+      end
     end
   end
 end
