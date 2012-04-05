@@ -1,6 +1,6 @@
 module TruestackClient
   class Configure
-    attr_accessor :key, :secret, :host, :logger, :code
+    attr_accessor :key, :host, :logger, :code
 
     def logger
       if !@logger
@@ -10,7 +10,7 @@ module TruestackClient
       @logger
     end
     def to_s
-      "key: #{@key} secret: #{@secret} host: #{@host}"
+      "key: #{@key} host: #{@host}"
     end
   end
 end

@@ -4,7 +4,6 @@ module TruestackClient
     def initialize(url, config)
       @config = config
       @key    = config.key
-      @secret = config.secret
       log = config.logger
       @url = URI.parse(url)
       @proto = :hybi07
@@ -19,13 +18,8 @@ module TruestackClient
     end
 
     def connect
-      nonce = TruestackClient.create_nonce
-      signature = TruestackClient.create_signature(@secret, nonce)
-
       sec_headers = {}
       sec_headers["TrueStack-Access-Key"] = @key
-      sec_headers["TrueStack-Access-Token"]= signature
-      sec_headers["TrueStack-Access-Nonce"]= nonce
 
       @ws_client.connect([], sec_headers)
     end

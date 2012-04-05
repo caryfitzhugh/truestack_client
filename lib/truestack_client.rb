@@ -78,11 +78,4 @@ module TruestackClient
   def self.config
     @config ||= TruestackClient::Configure.new
   end
-  def self.create_signature(secret, nonce)
-    digest = OpenSSL::Digest::Digest.new('sha256')
-    OpenSSL::HMAC.hexdigest(digest, secret, nonce)
-  end
-  def self.create_nonce
-    Time.now.to_i.to_s + OpenSSL::Random.random_bytes(32).unpack("H*")[0]
-  end
 end

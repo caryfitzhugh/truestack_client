@@ -3,7 +3,6 @@ module TruestackClient
     def initialize(config)
       @config = config
       @key  = config.key
-      @secret = config.secret
       @url = @config.host
       @http = Net::HTTP.new(URI.parse(config.host))
       @http.open_timeout = 3 # in seconds
@@ -13,13 +12,8 @@ module TruestackClient
       true
     end
     def deploy(data)
-      nonce = TruestackClient.create_nonce
-      signature = TruestackClient.create_signature(@secret, nonce)
-
       sec_headers = {}
       sec_headers["TrueStack-Access-Key"] = @key
-      sec_headers["TrueStack-Access-Token"]= signature
-      sec_headers["TrueStack-Access-Nonce"]= nonce
 
       request = Net::HTTP::Post.new("/app/deployments")
       request.body = data
@@ -32,8 +26,6 @@ module TruestackClient
 
       sec_headers = {}
       sec_headers["TrueStack-Access-Key"] = @key
-      sec_headers["TrueStack-Access-Token"]= signature
-      sec_headers["TrueStack-Access-Nonce"]= nonce
 
 
       url = URI.parse(@config.host)
