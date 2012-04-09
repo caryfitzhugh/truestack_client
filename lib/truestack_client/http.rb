@@ -21,12 +21,8 @@ module TruestackClient
       http.request(request)
     end
     def write_data(data)
-      nonce = TruestackClient.create_nonce
-      signature = TruestackClient.create_signature(@secret, nonce)
-
       sec_headers = {}
       sec_headers["TrueStack-Access-Key"] = @key
-
 
       url = URI.parse(@config.host)
       request = Net::HTTP::Post.new("/app/event")
