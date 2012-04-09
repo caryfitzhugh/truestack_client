@@ -15,21 +15,30 @@ module TruestackClient
   end
 
   # Data should be a hash such as this:
-  # {
-  #   'grouping:function#name' => { s: start_time_since_request_began, d: duration_of_request }
-  #   ...
-  # }
   #
-  # Where grouping is one of model / app / view / browser / custom
-  # function name is either Class#action, or view_path
   #
-  # timestamp is the time of the request occurring
-  def self.request(action_name, start_time, method_data={})
+  #  request:
+  #    name: controller#action
+  #    request_id:  (unique token)
+  #    actions: [
+  #      {    type => controller | model | helper | view | browser | lib
+  #           tstart
+  #           tend
+  #           duration
+  #           name: klass#method
+  #      }
+  #    ]
+  #
+  # Where grouping is one of model / controller / view / browser / helper / ?
+  # function name is either Class#action, or view_path (starting with app/...)
+  #
+  # tstart is just a ruby DateTime
+  def self.request(action_name, request_id, actions={})
       payload = JSON.generate({
                                     :type => :request,
-                                    :name=>action_name,
-                                    :timestamp => start_time,
-                                    :data=>method_data
+                                    :name=> action_name,
+                                    :request_id => request_id,
+                                    :actions=>actions
                                    })
       websocket_or_http.write_data(payload)
   end
