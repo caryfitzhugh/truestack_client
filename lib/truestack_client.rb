@@ -43,12 +43,14 @@ module TruestackClient
       websocket_or_http.write_data(payload)
   end
 
-  def self.exception(action_name, e)
+  def self.exception(action_name, start_time, e, request_env)
       websocket_or_http.write_data(JSON.generate({
                                     :type => :exception,
-                                    :name=>action_name,
-                                    :timestamp => start_time,
-                                    :data=>{:type => e.type, :backtrace => e.backtrace, :to_s => e.to_s  }
+                                    :request_name=>action_name,
+                                    :tstart => start_time,
+                                    :exception_name => e.to_s,
+                                    :backtrace => e.backtrace,
+                                    :env => request_env
                                    }))
   end
 
