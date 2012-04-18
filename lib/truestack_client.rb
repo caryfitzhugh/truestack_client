@@ -35,23 +35,32 @@ module TruestackClient
   # tstart is just a ruby DateTime
   def self.request(action_name, request_id, actions={})
       payload = JSON.generate({
-                                    :type => :request,
-                                    :name=> action_name,
-                                    :request_id => request_id,
-                                    :actions=>actions
-                                   })
+                      :type => :request,
+                      :name=> action_name,
+                      :request_id => request_id,
+                      :actions=>actions
+                     })
       websocket_or_http.write_data(payload)
   end
 
   def self.exception(action_name, start_time, e, request_env)
-      websocket_or_http.write_data(JSON.generate({
-                                    :type => :exception,
-                                    :request_name=>action_name,
-                                    :tstart => start_time,
-                                    :exception_name => e.to_s,
-                                    :backtrace => e.backtrace,
-                                    :env => request_env
-                                   }))
+      request_env_data = {}
+      request_env.each_pair do |k, v|
+        begin
+        request_env_data[k.to_s] = v.to_s
+        rescue Exception => e
+        end
+      end
+
+      payload = (JSON.generate({
+                      :type => :exception,
+                      :request_name=>action_name,
+                      :tstart => start_time,
+                      :exception_name => e.to_s,
+                      :backtrace => e.backtrace,
+                      :env => request_env_data
+                     }))
+      websocket_or_http.write_data payload
   end
 
   def self.deploy(commit_id, commit_data={})
