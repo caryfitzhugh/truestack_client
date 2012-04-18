@@ -40,6 +40,7 @@ module TruestackClient
                       :request_id => request_id,
                       :actions=>actions
                      })
+      TruestackClient.logger.info "Pushing request data: " + payload
       websocket_or_http.write_data(payload)
   end
 
@@ -60,6 +61,7 @@ module TruestackClient
                       :backtrace => e.backtrace,
                       :env => request_env_data
                      }))
+      TruestackClient.logger.info "Pushing exception data: " + payload
       websocket_or_http.write_data payload
   end
 
