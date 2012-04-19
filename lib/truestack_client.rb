@@ -65,12 +65,13 @@ module TruestackClient
       websocket_or_http.write_data payload
   end
 
-  def self.metric(tstart, name, value)
+  def self.metric(tstart, name, value, meta_data={})
       payload = {
                       :type => :metric,
                       :name => name,
                       :value => value,
-                      :tstart => tstart
+                      :tstart => tstart,
+                      :meta_data => meta_data
                      }
       TruestackClient.logger.info "Pushing metric data: " + payload.to_yaml
       websocket_or_http.write_data payload
