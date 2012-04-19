@@ -26,6 +26,7 @@ module TruestackClient
       sec_headers["TrueStack-Access-Key"] = @key
 
       @ws_client.connect([], sec_headers)
+      sleep 1 # give it some time!
     end
 
     def connected?
