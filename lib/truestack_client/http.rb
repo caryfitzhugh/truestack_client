@@ -20,13 +20,15 @@ module TruestackClient
       request.initialize_http_header(sec_headers)
       http.request(request)
     end
+
     def write_data(data)
       sec_headers = {}
       sec_headers["TrueStack-Access-Key"] = @key
 
       url = URI.parse(@config.host)
-      request = Net::HTTP::Post.new("/app/event")
-      request.body = data
+      type = data.delete(:type)
+      request = Net::HTTP::Post.new("/app/#{type}")
+      request.body = JSON.generate(data)
       request.initialize_http_header(sec_headers)
 
       res = Net::HTTP.new(url.host, url.port).start {|http| http.request(request) }

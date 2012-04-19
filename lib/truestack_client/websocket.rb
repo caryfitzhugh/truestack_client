@@ -12,6 +12,10 @@ module TruestackClient
       connect
     end
 
+    def write_data(msg)
+      @ws_client.write_data(JSON.generate(msg))
+    end
+
     def method_missing(*args)
       name = args.shift
       @ws_client.send(name, *args)
