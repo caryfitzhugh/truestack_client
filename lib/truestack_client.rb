@@ -34,14 +34,14 @@ module TruestackClient
   #
   # tstart is just a ruby DateTime
   def self.request(action_name, request_id, actions={})
-      payload = JSON.generate({
-                      :type => :request,
-                      :name=> action_name,
-                      :request_id => request_id,
-                      :actions=>actions
-                     })
-      TruestackClient.logger.info "Pushing request data: " + payload
-      websocket_or_http.write_data(payload)
+      payload = {
+                  :type => :request,
+                  :name=> action_name,
+                  :request_id => request_id,
+                  :actions=>actions
+                }
+      TruestackClient.logger.info "Pushing request data: " + payload.to_yaml
+      websocket_or_http.write_data payload
   end
 
   def self.exception(action_name, start_time, e, request_env)
@@ -53,15 +53,27 @@ module TruestackClient
         end
       end
 
-      payload = (JSON.generate({
+      payload = {
                       :type => :exception,
                       :request_name=>action_name,
                       :tstart => start_time,
                       :exception_name => e.to_s,
                       :backtrace => e.backtrace,
                       :env => request_env_data
-                     }))
-      TruestackClient.logger.info "Pushing exception data: " + payload
+                     }
+      TruestackClient.logger.info "Pushing exception data: " + payload.to_yaml
+      websocket_or_http.write_data payload
+  end
+
+  def self.metric(tstart, name, value, meta_data={})
+      payload = {
+                      :type => :metric,
+                      :name => name,
+                      :value => value,
+                      :tstart => tstart,
+                      :meta_data => meta_data
+                     }
+      TruestackClient.logger.info "Pushing metric data: " + payload.to_yaml
       websocket_or_http.write_data payload
   end
 
