@@ -1,6 +1,6 @@
 module TruestackClient
   class Configure
-    attr_accessor :key, :host, :logger, :code
+    attr_accessor :key, :host, :logger
 
     def logger
       if !@logger
