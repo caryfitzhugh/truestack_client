@@ -77,8 +77,16 @@ module TruestackClient
       websocket_or_http.write_data payload
   end
 
-  def self.deploy(commit_id, commit_data={})
-    http.deploy(JSON.generate({:commit_id => commit_id, :data => commit_data}))
+  def self.startup(commit_id, host_id, instrumented_method_names)
+    payload = {
+        :type => :startup,
+        :host_id   => host_id,
+        :commit_id => commit_id,
+        :methods => instrumented_method_names
+    }
+
+    TruestackClient.logger.info "Pushing startup data: " + payload.to_yaml
+    websocket_or_http.write_data payload
   end
 
   def self.http

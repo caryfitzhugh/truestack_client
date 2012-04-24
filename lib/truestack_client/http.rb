@@ -11,15 +11,6 @@ module TruestackClient
     def connected?
       true
     end
-    def deploy(data)
-      sec_headers = {}
-      sec_headers["TrueStack-Access-Key"] = @key
-
-      request = Net::HTTP::Post.new("/app/deployments")
-      request.body = data
-      request.initialize_http_header(sec_headers)
-      http.request(request)
-    end
 
     def write_data(data)
       sec_headers = {}
