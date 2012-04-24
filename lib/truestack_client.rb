@@ -82,6 +82,7 @@ module TruestackClient
         :type => :startup,
         :host_id   => host_id,
         :commit_id => commit_id,
+        :tstart    => Time.now,
         :methods => instrumented_method_names
     }
 
