@@ -14,6 +14,13 @@ module TruestackClient
     self.config
   end
 
+  def self.reset
+    if @websocket
+      @websocket.close
+      @websocket = nil
+    end
+  end
+
   # Data should be a hash such as this:
   #
   #
