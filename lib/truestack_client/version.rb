@@ -1,3 +1,3 @@
 module TruestackClient
-  VERSION = "0.0.30"
+  VERSION = "0.0.32"
 end

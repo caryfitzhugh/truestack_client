@@ -48,7 +48,9 @@ module TruestackClient
                   :actions=>actions
                 }
       TruestackClient.logger.info "Pushing request data: " + payload.to_yaml
-      websocket_or_http.write_data payload
+      retry_if_failed_connection do
+        websocket_or_http.write_data payload
+      end
   end
 
   def self.exception(action_name, start_time, e, request_env)
@@ -69,7 +71,9 @@ module TruestackClient
                       :env => request_env_data
                      }
       TruestackClient.logger.info "Pushing exception data: " + payload.to_yaml
-      websocket_or_http.write_data payload
+      retry_if_failed_connection do
+        websocket_or_http.write_data payload
+      end
   end
 
   def self.metric(tstart, name, value, meta_data={})
@@ -81,7 +85,10 @@ module TruestackClient
                       :meta_data => meta_data
                      }
       TruestackClient.logger.info "Pushing metric data: " + payload.to_yaml
-      websocket_or_http.write_data payload
+
+      retry_if_failed_connection do
+        websocket_or_http.write_data payload
+      end
   end
 
   def self.startup(commit_id, host_id, instrumented_method_names)
@@ -94,7 +101,9 @@ module TruestackClient
     }
 
     TruestackClient.logger.info "Pushing startup data: " + payload.to_yaml
-    websocket_or_http.write_data payload
+    retry_if_failed_connection do
+      websocket_or_http.write_data payload
+    end
   end
 
   def self.http
@@ -127,5 +136,19 @@ module TruestackClient
   end
   def self.config
     @config ||= TruestackClient::Configure.new
+  end
+
+  def self.retry_if_failed_connection
+    tries = 0
+    begin
+      tries += 1
+      yield
+    rescue Exception => e
+      self.logger.info "Exception: #{e}"
+      if tries <= 1
+        self.reset
+        retry
+      end
+    end
   end
 end
