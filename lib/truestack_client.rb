@@ -26,7 +26,6 @@ module TruestackClient
   #
   #  request:
   #    name: controller#action
-  #    request_id:  (unique token)
   #    actions: [
   #      {    type => controller | model | helper | view | browser | lib
   #           tstart
@@ -40,11 +39,10 @@ module TruestackClient
   # function name is either Class#action, or view_path (starting with app/...)
   #
   # tstart is just a ruby DateTime
-  def self.request(action_name, request_id, actions={})
+  def self.request(action_name, actions={})
       payload = {
                   :type => :request,
                   :name=> action_name,
-                  :request_id => request_id,
                   :actions=>actions
                 }
       TruestackClient.logger.info "Pushing request data: " + payload.to_yaml
