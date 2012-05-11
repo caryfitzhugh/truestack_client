@@ -26,25 +26,33 @@ module TruestackClient
   #
   #  request:
   #    name: controller#action
-  #    actions: [
-  #      {    type => controller | model | helper | view | browser | lib
+  #    actions: {
+  #      name: klass#method
+  #      [{
   #           tstart
   #           tend
-  #           duration
-  #           name: klass#method
-  #      }
+  #      },...]
   #    ]
   #
   # Where grouping is one of model / controller / view / browser / helper / ?
   # function name is either Class#action, or view_path (starting with app/...)
   #
-  # tstart is just a ruby DateTime
+  # tstart is just a ruby DateTime, tend as well.
   def self.request(action_name, actions={})
       payload = {
                   :type => :request,
                   :name=> action_name,
                   :actions=>actions
                 }
+
+      # Convert to tstart timestamps
+      actions.each_pair do |name, calls|
+        actions[name] = calls.map do |call|
+          call.merge({:tstart => self.to_timestamp(call[:tstart]),
+                      :tend   => self.to_timestamp(call[:tend])})
+        end
+      end
+
       TruestackClient.logger.info "Pushing request data: " + payload.to_yaml
       retry_if_failed_connection do
         websocket_or_http.write_data payload
@@ -63,7 +71,7 @@ module TruestackClient
       payload = {
                       :type => :exception,
                       :request_name=>action_name,
-                      :tstart => start_time,
+                      :tstart => self.to_timestamp(start_time),
                       :exception_name => e.to_s,
                       :backtrace => e.backtrace,
                       :env => request_env_data
@@ -74,27 +82,12 @@ module TruestackClient
       end
   end
 
-  def self.metric(tstart, name, value, meta_data={})
-      payload = {
-                      :type => :metric,
-                      :name => name,
-                      :value => value,
-                      :tstart => tstart,
-                      :meta_data => meta_data
-                     }
-      TruestackClient.logger.info "Pushing metric data: " + payload.to_yaml
-
-      retry_if_failed_connection do
-        websocket_or_http.write_data payload
-      end
-  end
-
   def self.startup(commit_id, host_id, instrumented_method_names)
     payload = {
         :type => :startup,
         :host_id   => host_id,
         :commit_id => commit_id,
-        :tstart    => Time.now,
+        :tstart    => self.to_timestamp(Time.now),
         :methods => instrumented_method_names
     }
 
@@ -134,6 +127,10 @@ module TruestackClient
   end
   def self.config
     @config ||= TruestackClient::Configure.new
+  end
+
+  def self.to_timstamp(time)
+    (time.to_f.*1000).to_i
   end
 
   def self.retry_if_failed_connection
