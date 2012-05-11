@@ -129,7 +129,7 @@ module TruestackClient
     @config ||= TruestackClient::Configure.new
   end
 
-  def self.to_timstamp(time)
+  def self.to_timestamp(time)
     (time.to_f.*1000).to_i
   end
 
