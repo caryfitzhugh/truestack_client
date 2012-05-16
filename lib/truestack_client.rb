@@ -59,7 +59,7 @@ module TruestackClient
       end
   end
 
-  def self.exception(action_name, start_time, e, failed_in_method, request_env)
+  def self.exception(action_name, start_time, failed_in_method, e, request_env)
       request_env_data = {}
       request_env.each_pair do |k, v|
         begin
