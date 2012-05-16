@@ -59,7 +59,7 @@ module TruestackClient
       end
   end
 
-  def self.exception(action_name, start_time, e, request_env)
+  def self.exception(action_name, start_time, e, failed_in_method, request_env)
       request_env_data = {}
       request_env.each_pair do |k, v|
         begin
@@ -71,12 +71,15 @@ module TruestackClient
       payload = {
                       :type => :exception,
                       :request_name=>action_name,
+                      :failed_in_method  => failed_in_method,
                       :tstart => self.to_timestamp(start_time),
                       :exception_name => e.to_s,
                       :backtrace => e.backtrace,
                       :env => request_env_data
                      }
+
       TruestackClient.logger.info "Pushing exception data: " + payload.to_yaml
+
       retry_if_failed_connection do
         websocket_or_http.write_data payload
       end
