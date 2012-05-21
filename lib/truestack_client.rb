@@ -74,9 +74,9 @@ module TruestackClient
                       :request_name=>action_name,
                       :failed_in_method  => failed_in_method,
                       :actions           => actions,
-                      :tstart => self.to_timestamp(start_time),
-                      :exception_name => e.to_s,
-                      :backtrace => e.backtrace,
+                      :tstart            => self.to_timestamp(start_time),
+                      :exception_name    => e.to_s,
+                      :backtrace         => e.backtrace,
                       :env => request_env_data
                      }
 
@@ -89,11 +89,11 @@ module TruestackClient
 
   def self.startup(commit_id, host_id, instrumented_method_names)
     payload = {
-        :type => :startup,
+        :type      => :startup,
         :host_id   => host_id,
         :commit_id => commit_id,
         :tstart    => self.to_timestamp(Time.now),
-        :methods => instrumented_method_names
+        :methods   => instrumented_method_names
     }
 
     TruestackClient.logger.info "Pushing startup data: " + payload.to_yaml
@@ -135,7 +135,11 @@ module TruestackClient
   end
 
   def self.to_timestamp(time)
-    (time.to_f.*1000).to_i
+    if (time.class != Fixnum)
+      (time.to_f.*1000).to_i
+    else
+      time
+    end
   end
 
   def self.retry_if_failed_connection
