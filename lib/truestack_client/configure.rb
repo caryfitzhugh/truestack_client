@@ -41,7 +41,7 @@ module TruestackClient
     def resource_uri
       if !@resource_uri
         if File.exist?(@resource_file_path || "truestack_uri")
-          @resource_uri = File.read(@resource_file_path || "truestack_uri")) rescue ""
+          @resource_uri = File.read(@resource_file_path || "truestack_uri") rescue ""
         else
           @resource_uri = ENV['TRUESTACK_URI']
         end
