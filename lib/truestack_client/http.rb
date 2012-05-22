@@ -2,8 +2,8 @@ module TruestackClient
   class HTTP
     def initialize(config)
       @config = config
-      @key  = config.key
-      @url = @config.host
+      @key    = config.key
+      @url    = config.host
       @http = Net::HTTP.new(URI.parse(config.host))
       @http.open_timeout = 3 # in seconds
       @http.read_timeout = 3 # in seconds
@@ -14,7 +14,7 @@ module TruestackClient
 
     def write_data(data)
       sec_headers = {}
-      sec_headers["TrueStack-Access-Key"] = @key
+      sec_headers["Truestack-Access-Key"] = @key
 
       url = URI.parse(@config.host)
       type = data.delete(:type)

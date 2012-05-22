@@ -4,7 +4,7 @@ module TruestackClient
     def initialize(url, config)
       @config = config
       @key    = config.key
-      log = config.logger
+      log     = config.logger
       @url = URI.parse(url)
       @proto = :hybi07
 
@@ -23,7 +23,7 @@ module TruestackClient
 
     def connect
       sec_headers = {}
-      sec_headers["TrueStack-Access-Key"] = @key
+      sec_headers["Truestack-Access-Key"] = @key
 
       @ws_client.connect([], sec_headers)
       sleep 1 # give it some time!

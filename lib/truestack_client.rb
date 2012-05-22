@@ -111,8 +111,7 @@ module TruestackClient
       @websocket
     else
       Rails.logger.info "Config -- " + config.to_s
-      uri = URI(config.host)
-      uri.path = "/director"
+      uri = config.director_path
       res = Net::HTTP.get_response(uri)
       # TODO Add some kind of limiting here
       self.logger.info "Response from director: #{res}"
