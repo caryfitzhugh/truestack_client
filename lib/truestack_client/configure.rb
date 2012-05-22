@@ -1,6 +1,7 @@
 module TruestackClient
   # The format is:  http://user_key@www.truestack.com/director_url
   class Configure
+
     def resource_uri=(v)
       @resource_uri = v
     end
@@ -35,8 +36,6 @@ module TruestackClient
       @resource_file_path = path
       resource_uri
     end
-
-    private
 
     def resource_uri
       if !@resource_uri
