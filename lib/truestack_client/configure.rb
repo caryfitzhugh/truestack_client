@@ -18,6 +18,10 @@ module TruestackClient
       URI(self.resource_uri).host
     end
 
+    def port
+      URI(self.resource_uri).port
+    end
+
     def director
       uri = URI(self.resource_uri)
       uri.user = ''

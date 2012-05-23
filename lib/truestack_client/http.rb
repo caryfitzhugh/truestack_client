@@ -2,11 +2,6 @@ module TruestackClient
   class HTTP
     def initialize(config)
       @config = config
-      @key    = config.key
-      @url    = config.host
-      @http = Net::HTTP.new(URI.parse(config.host))
-      @http.open_timeout = 3 # in seconds
-      @http.read_timeout = 3 # in seconds
     end
     def connected?
       true
@@ -14,15 +9,14 @@ module TruestackClient
 
     def write_data(data)
       sec_headers = {}
-      sec_headers["Truestack-Access-Key"] = @key
+      sec_headers["Truestack-Access-Key"] = @config.key
 
-      url = URI.parse(@config.host)
       type = data.delete(:type)
       request = Net::HTTP::Post.new("/app/#{type}")
       request.body = JSON.generate(data)
       request.initialize_http_header(sec_headers)
 
-      res = Net::HTTP.new(url.host, url.port).start {|http| http.request(request) }
+      res = Net::HTTP.new(@config.host, @config.port).start {|http| http.request(request) }
       case res
       when Net::HTTPSuccess, Net::HTTPRedirection
         # OK
