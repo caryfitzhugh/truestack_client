@@ -129,6 +129,9 @@ module TruestackClient
   def self.logger
     config.logger
   end
+  def self.set_resource_file_location(loc)
+    self.config.set_resource_file_location(loc)
+  end
   def self.config
     @config ||= TruestackClient::Configure.new
   end
