@@ -59,7 +59,7 @@ module TruestackClient
       end
   end
 
-  def self.exception(action_name, start_time, failed_in_method, actions, e, request_env)
+  def self.exception(action_name, start_time, failed_in_method, actions, e)
       request_env_data = {}
 
       request_env.each_pair do |k, v|
@@ -70,14 +70,12 @@ module TruestackClient
       end
 
       payload = {
-                      :type => :exception,
-                      :request_name=>action_name,
+                      :type              => :exception,
+                      :request_name      => action_name,
                       :failed_in_method  => failed_in_method,
                       :actions           => actions,
                       :tstart            => self.to_timestamp(start_time),
-                      :exception_name    => e.to_s,
-                      :backtrace         => e.backtrace,
-                      :env => request_env_data
+                      :exception_name    => "#{e.to_s}@#{e.backtrace.first}"
                      }
 
       TruestackClient.logger.info "Pushing exception data: " + payload.to_yaml
@@ -129,16 +127,18 @@ module TruestackClient
   def self.logger
     config.logger
   end
+
   def self.set_resource_file_location(loc)
     self.config.set_resource_file_location(loc)
   end
+
   def self.config
     @config ||= TruestackClient::Configure.new
   end
 
   def self.to_timestamp(time)
     if (time.class != Fixnum)
-      (time.to_f.*1000).to_i
+      (time.utc.to_f.*1000).to_i
     else
       time
     end
