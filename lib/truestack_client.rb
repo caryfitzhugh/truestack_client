@@ -60,15 +60,6 @@ module TruestackClient
   end
 
   def self.exception(action_name, start_time, failed_in_method, actions, e)
-      request_env_data = {}
-
-      request_env.each_pair do |k, v|
-        begin
-        request_env_data[k.to_s] = v.to_s
-        rescue Exception => e
-        end
-      end
-
       payload = {
                       :type              => :exception,
                       :request_name      => action_name,
