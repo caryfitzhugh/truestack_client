@@ -129,7 +129,7 @@ module TruestackClient
 
   def self.to_timestamp(time)
     if (time.class != Fixnum)
-      (time.utc.to_f.*1000).to_i
+      (time.to_f.*1000).to_i
     else
       time
     end
