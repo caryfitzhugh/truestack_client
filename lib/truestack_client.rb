@@ -59,14 +59,19 @@ module TruestackClient
       end
   end
 
-  def self.exception(action_name, start_time, failed_in_method, actions, e)
+  def self.exception(action_name, start_time, failed_in_method, actions, e, opts={})
+      exception_name = "#{e.to_s}@#{e.backtrace.first}"
+      if (opts[:ignore_path_prefix])
+        exception_name = exception_name.gsub(opts[:ignore_path_prefix], ' ')
+      end
+
       payload = {
                       :type              => :exception,
                       :request_name      => action_name,
                       :failed_in_method  => failed_in_method,
                       :actions           => actions,
                       :tstart            => self.to_timestamp(start_time),
-                      :exception_name    => "#{e.to_s}@#{e.backtrace.first}"
+                      :exception_name    => exception_name
                      }
 
       TruestackClient.logger.info "Pushing exception data: " + payload.to_yaml
