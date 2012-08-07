@@ -62,7 +62,7 @@ module TruestackClient
   def self.exception(action_name, start_time, failed_in_method, actions, e, opts={})
       exception_name = "#{e.to_s}@#{e.backtrace.first}"
       if (opts[:ignore_path_prefix])
-        exception_name = exception_name.gsub(opts[:ignore_path_prefix], ' ')
+        exception_name = exception_name.gsub(opts[:ignore_path_prefix].to_s, ' ')
       end
 
       payload = {
