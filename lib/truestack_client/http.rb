@@ -12,7 +12,7 @@ module TruestackClient
       sec_headers["Truestack-Access-Key"] = @config.key
 
       type = data[:type]
-      request = Net::HTTP::Post.new("/app/#{type}")
+      request = Net::HTTP::Post.new("/api/collector/#{type}")
       request.body = JSON.generate(data)
       request.initialize_http_header(sec_headers)
 
