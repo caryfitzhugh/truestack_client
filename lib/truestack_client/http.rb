@@ -10,6 +10,7 @@ module TruestackClient
     def write_data(data)
       sec_headers = {}
       sec_headers["Truestack-Access-Key"] = @config.key
+      sec_headers["Truestack-Client-Type"] = TruestackClient.create_type_string(@config.app_version)
 
       type = data[:type]
       request = Net::HTTP::Post.new("/api/collector/#{type}")

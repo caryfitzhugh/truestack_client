@@ -5,6 +5,7 @@ require 'json'
 require 'logger'
 require 'net/http'
 require 'truestack_client/websocket'
+require 'truestack_client/version'
 require 'truestack_client/http'
 require 'truestack_client/configure'
 
@@ -138,6 +139,15 @@ module TruestackClient
     else
       time
     end
+  end
+
+  def self.parse_type(type_str)
+    client, app = type_str.split("|",2)
+    {client: client, app: app}
+  end
+
+  def self.create_type_string(client)
+    "#{self::VERSION}|#{client}"
   end
 
   def self.retry_if_failed_connection

@@ -10,6 +10,10 @@ module TruestackClient
       @logger = l
     end
 
+    def app_version
+      @app_version || "Unknown"
+    end
+
     def key
       URI(self.resource_uri).user
     end
