@@ -52,7 +52,7 @@ module TruestackClient
         else
           @resource_uri = ENV['TRUESTACK_URI']
         end
-        if @(resource_uri == nil || @resource_uri == '')
+        if (@resource_uri == nil || @resource_uri == '')
           raise "Need to set env['TRUESTACK_URI'] or config/truestack_uri"
         end
         @resource_uri = @resource_uri.strip
