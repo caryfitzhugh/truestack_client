@@ -10,6 +10,10 @@ module TruestackClient
       @logger = l
     end
 
+    def app_version=(v)
+      @app_version = v
+    end
+
     def app_version
       @app_version || "Unknown"
     end
