@@ -105,10 +105,11 @@ module TruestackClient
     if @websocket && @websocket.connected?
       @websocket
     else
-      Rails.logger.info "Config -- " + config.to_s
       uri = config.director
       res = Net::HTTP.get_response(uri)
+
       # TODO Add some kind of limiting here
+
       self.logger.info "Response from director: #{res}"
 
       if (res.code === '307')
