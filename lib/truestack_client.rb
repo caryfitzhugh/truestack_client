@@ -147,8 +147,8 @@ module TruestackClient
     {client: client, app: app}
   end
 
-  def self.create_type_string(client)
-    "#{self::VERSION}|#{client}"
+  def self.create_type_string(client, env)
+    "#{self::VERSION}|#{client}|#{env}"
   end
 
   def self.retry_if_failed_connection

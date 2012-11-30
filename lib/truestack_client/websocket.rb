@@ -24,8 +24,7 @@ module TruestackClient
     def connect
       sec_headers = {}
       sec_headers["Truestack-Access-Key"] = @key
-      sec_headers["Truestack-Client-Type"] = TruestackClient.create_type_string(@config.app_version)
-      sec_headers["Truestack-Client-Environment"] = @config.app_environment
+      sec_headers["Truestack-Client-Type"] = TruestackClient.create_type_string(@config.app_version, @config.app_environment)
 
       @ws_client.connect([], sec_headers)
       sleep 1 # give it some time!
