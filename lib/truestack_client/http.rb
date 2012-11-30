@@ -11,7 +11,7 @@ module TruestackClient
       sec_headers = {}
       sec_headers["Truestack-Access-Key"] = @config.key
       sec_headers["Truestack-Client-Type"] = TruestackClient.create_type_string(@config.app_version)
-      sec_headers["Truestack-Access-Environment"] = @config.app_environment
+      sec_headers["Truestack-Client-Environment"] = @config.app_environment
 
       type = data[:type]
       request = Net::HTTP::Post.new("/api/collector/#{type}")
