@@ -143,8 +143,8 @@ module TruestackClient
   end
 
   def self.parse_type(type_str)
-    client, app = type_str.split("|",2)
-    {client: client, app: app}
+    client, app, env = type_str.split("|",3)
+    {client: client, app: app, env: env}
   end
 
   def self.create_type_string(client, env)
